@@ -11,31 +11,37 @@ const DEFAULT_COLORS = [
 ];
 var colorPickerValue = "#ffffff";
 var currentModel = 0;
-function load(){
+function load() {
 	addClickEventsToSvgElements();
 	loadColors(currentModel, ALL_ITEMS[currentModel], DEFAULT_COLORS[currentModel]);
 	sendModelFrontstage(ALL_MODELS[currentModel]);
 }
-function addClickEventsToSvgElements(){
-	for(var modelIndex = 0; modelIndex<ALL_MODELS.length; modelIndex++){
-		for(var itemIndex = 0; itemIndex < ALL_ITEMS[modelIndex].length; itemIndex++){
+function addClickEventsToSvgElements() {
+	for (var modelIndex = 0; modelIndex < ALL_MODELS.length; modelIndex++) {
+		for (var itemIndex = 0; itemIndex < ALL_ITEMS[modelIndex].length; itemIndex++) {
 			var itemElement = document.getElementById(ALL_MODELS[modelIndex])
-			.querySelector("#" + ALL_ITEMS[modelIndex][itemIndex]);
-			itemElement.setAttribute("style","cursor: pointer;");
-			itemElement.setAttribute("onClick","setColorToElement(this)");
+				.querySelector("#" + ALL_ITEMS[modelIndex][itemIndex]);
+			itemElement.setAttribute("style", "cursor: pointer;");
+			itemElement.setAttribute("onClick", "setColorToElement(this)");
 		}
 	}
 }
-function sendModelFrontstage(modelName){
+
+function sendModelFrontstage(modelName) {
 	var stage = document.getElementById('stage');
 	var model = document.getElementById(modelName);
-	stage.innerHTML = model.innerHTML;
-	model.innerHTML = "";
+	stage.style.transform = "scale(0.2)";
+	setTimeout(function () {
+		stage.innerHTML = model.innerHTML;
+		model.innerHTML = "";
+		stage.style.transition = "transform .1s ease-in"
+		stage.style.transform = "scale(1)";
+	}, 150);
 }
-function sendModelBackstage(modelName){
+function sendModelBackstage(modelName) {
 	var stage = document.getElementById('stage');
 	var model = document.getElementById(modelName);
-	model.innerHTML = stage.innerHTML ;
+	model.innerHTML = stage.innerHTML;
 	stage.innerHTML = "";
 }
 function loadColors(modelIndex, items, colors) {
@@ -73,7 +79,7 @@ function setColor(modelIndex, itemIndex, color) {
 		child.style.fill = color;
 	}
 }
-function setColorToElement(itemElement){
+function setColorToElement(itemElement) {
 	var children = itemElement.children;
 	for (var i = 0; i < children.length; i++) {
 		var child = children[i];
